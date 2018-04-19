@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/common_head.html::commonHeader">
+<title>注册</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head> 
+<body class="login-bg">
+		<div class="login-body">
+			<div class="login-heading">
+				<h1>员工账号注册</h1>
+			</div>
+			<div class="login-info">
+				<form th:action="@{/toSignup}" th:method="post" th:object="${employee}">
+					<input id="name" type="text" class="user" name="name" placeholder="Name" required="true">
+					<input id="account" type="text" class="user" name="account" placeholder="Account" required="true">
+					<input id="password" type="password" name="password" class="lock" placeholder="Password" required="true">
+					<input id="rePassword" type="password" name="rePassword" class="lock" placeholder="Confirm Password" required="true">
+					<input type="submit" name="Sign In" value="提交" />
+					<div class="signup-text">
+						<a th:href="@{/login}">Already have an account? Login here.</a>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="go-back login-go-back">
+				<a th:href="@{/index}">Go To Home</a>
+			</div>
+		<div class="copyright login-copyright">
+		</div>
+</body>
+</html>

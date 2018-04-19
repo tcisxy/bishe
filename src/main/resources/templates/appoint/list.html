@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/common_head.html::commonHeader">
+    <title>预约记录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body class="cbp-spmenu-push">
+<div class="main-content">
+    <div th:include="common/side_bar.html::sideBar"></div>
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="grids">
+                <div class="progressbar-heading grids-heading">
+                    <h2>预约记录</h2>
+                </div>
+                <div class="panel panel-widget">
+                    <div class="search-box"  style="margin-left: 0;margin-bottom: 10px;width:100%">
+                        <form class="input" th:action="@{/query/appoint}" th:method="post" th:object="${appointment}">
+                            <input class="sb-search-input form-control" required="true" placeholder="手机号" id="phone" name="phone" style="margin-right: 10px;width:200px;float: left"/>
+                            <button type="submit" class="btn btn-primary" style="padding: 0.5em 1em;">查询</button>
+                            <a th:href="@{/list/appoint}" class="btn btn-info" style="padding: 0.5em 1em;">重置</a>
+                        </form>
+                    </div>
+                    <div class="tables">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>会员姓名</th>
+                                <th>手机号</th>
+                                <th>预约医生</th>
+                                <th>预约时间</th>
+                                <th>挂号</th>
+                                <!--<th>编辑</th>-->
+                                <th th:if="${#session.getAttribute('user').deptId == 1}">删除</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr  th:each="appoint : ${appointments}">
+                                <th scope="row" th:text="${appoint.id}">1</th>
+                                <td th:text="${appoint.userName}">neo</td>
+                                <td th:text="${appoint.phone}">Otto</td>
+                                <td th:text="${appoint.doctorName}">6</td>
+                                <td th:text="${appoint.time}">6</td>
+                                <td th:if="${appoint.appointStatus == 0}"><a th:href="@{/toQueue/appoint(id=${appoint.id})}">挂号</a></td>
+                                <td th:text="已挂号" th:if="${appoint.appointStatus == 1}">6</td>
+                                <td th:if="${#session.getAttribute('user').deptId == 1}"><a th:href="@{/delete/appoint(id=${appoint.id})}">delete</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <a type="button" th:href="@{/toAdd/appoint}" class="btn btn_5 btn-lg btn-success warning_1">添加预约</a>
+            </div>
+        </div>
+    </div>
+    <div class="dev-page"></div>
+</div>
+<div th:include="common/onload_js.html::onloadJS"></div>
+</body>
+</html>

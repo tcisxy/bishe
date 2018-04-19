@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/common_head.html::commonHeader">
+    <title>添加预约记录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body class="cbp-spmenu-push">
+<div class="main-content">
+    <div th:include="common/side_bar.html::sideBar"></div>
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="grids">
+                <div class="progressbar-heading grids-heading">
+                    <h2>添加预约</h2>
+                </div>
+                <div class="panel panel-widget forms-panel">
+                    <div class="forms">
+                        <div class="form-three widget-shadow">
+                            <form class="valida form-horizontal" method="post" th:action="@{/add/appoint}"
+                                  th:object="${appointment}">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="phone">用户手机号</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" name="phone" id="phone" required="true"
+                                               class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="doctorId">预约医生</label>
+                                    <div class="col-sm-4">
+                                        <select name="doctorId" id="doctorId" required="true" class="form-control">
+                                            <option value="" selected="true">--请选择--</option>
+                                            <option th:each="doctor : ${doctors}" th:value="${doctor.id}"
+                                                    th:text="${doctor.name}">Doctor Name
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="time">预约时间</label>
+                                    <div class="col-sm-4">
+                                        <div class="input-group date form_date" data-link-field="dtp_input1" style="float: left">
+                                            <input required="true" class="form-control" id="time" name="time" size="16" type="text" placeholder="预约时间" readonly>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        Date.prototype.Format = function (fmt) {
+                                            var o = {
+                                                "M+": this.getMonth() + 1, //月份
+                                                "d+": this.getDate(), //日
+                                                "h+": this.getHours(), //小时
+                                                "m+": this.getMinutes(), //分
+                                                "s+": this.getSeconds(), //秒
+                                                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                                                "S": this.getMilliseconds() //毫秒
+                                            };
+                                            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                                            for (var k in o)
+                                                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                                            return fmt;
+                                        }
+
+                                        $('.form_date').datetimepicker({
+                                            format: 'yyyy-mm-dd hh:ii:ss',
+                                            weekStart: 1,
+                                            todayBtn:  1,
+                                            autoclose: 1,
+                                            todayHighlight: 1,
+                                            forceParse: 0
+                                        });
+                                        $('#time').val((new Date()).Format("yyyy-MM-dd hh:mm:ss"));
+                                    </script>
+                                </div>
+                                <hr>
+                                <p>
+                                <div class="col-sm-offset-2">
+                                    <span style="font-size: 12px;color: red" th:text="${message}"></span>
+                                    <input type="submit" name="sub-1" value="提交" class="btn btn-primary"/>
+                                    <input type="reset" name="res-1" id="res-1" value="重置" class="btn btn-danger"/>
+                                </div>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <a type="button" th:href="@{/list/appoint}" class="btn btn_5 btn-lg btn-success warning_1">返回</a>
+            </div>
+        </div>
+    </div>
+    <div class="dev-page">
+    </div>
+</div>
+<div th:include="common/onload_js.html::onloadJS"></div>
+</body>
+</html>

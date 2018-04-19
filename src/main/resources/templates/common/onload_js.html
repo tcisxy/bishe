@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="onloadJS">
+        <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+        <script type="text/javascript" th:src="@{/js/dev-loaders.js}"></script>
+        <script type="text/javascript" th:src="@{/js/dev-layout-default.js}"></script>
+        <script type="text/javascript" th:src="@{/js/jquery.marquee.js}"></script>
+        <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+        <script type="text/javascript" th:src="@{/js/jquery.jqcandlestick.min.js}"></script>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/jqcandlestick.css}" />
+
+        <!--max-plugin-->
+        <script type="text/javascript" th:src="@{/js/plugins.js}"></script>
+        <!--//max-plugin-->
+        <script th:src="@{/js/classie.js}"></script>
+        <!--scrolling js-->
+        <script th:src="@{/js/jquery.nicescroll.js}"></script>
+        <script th:src="@{/js/scripts.js}"></script>
+
+        <script>
+            var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+                showLeftPush = document.getElementById( 'showLeftPush' ),
+                body = document.body;
+
+            showLeftPush.onclick = function() {
+                classie.toggle( this, 'active' );
+                classie.toggle( body, 'cbp-spmenu-push-toright' );
+                classie.toggle( menuLeft, 'cbp-spmenu-open' );
+                disableOther( 'showLeftPush' );
+            };
+
+
+            function disableOther( button ) {
+                if( button !== 'showLeftPush' ) {
+                    classie.toggle( showLeftPush, 'disabled' );
+                }
+            }
+        </script>
+
+        <script language="javascript" type="text/javascript" th:src="@{/js/jquery.flot.js}"></script>
+        <script language="javascript" type="text/javascript" th:src="@{/js/jquery.flot.errorbars.js}"></script>
+        <script language="javascript" type="text/javascript" th:src="@{/js/jquery.flot.navigate.js}"></script>
+        <script th:src="@{/js/svg-donut-chart-framework.js}"></script>
+        <script th:src="@{/js/jquery.fn.gantt.js}"></script>
+    </div>
+</body>
+</html>

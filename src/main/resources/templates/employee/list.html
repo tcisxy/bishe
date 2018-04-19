@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/common_head.html::commonHeader">
+    <title>User Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body class="cbp-spmenu-push">
+<div class="main-content">
+    <div th:include="common/side_bar.html::sideBar"></div>
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="grids">
+                <div class="progressbar-heading grids-heading">
+                    <h2>员工列表</h2>
+                </div>
+                <div class="panel panel-widget">
+                    <div class="search-box"  style="margin-left: 0;margin-bottom: 10px;width:100%">
+                        <!--<form class="input" th:action="@{/query/user}" th:method="post" th:object="${user}">
+                            <input class="sb-search-input form-control" required="true" placeholder="手机号" id="phone" name="phone" style="margin-right: 10px;width:200px;float: left"/>
+                            <button type="submit" class="btn btn-primary" style="padding: 0.5em 1em;">查询</button>
+                            <a th:href="@{/list/user}" class="btn btn-info" style="padding: 0.5em 1em;">重置</a>
+                        </form>-->
+                    </div>
+                    <div class="tables">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>员工姓名</th>
+                                <th>员工账号</th>
+                                <th>所属部门</th>
+                                <th>编辑</th>
+                                <th th:if="${#session.getAttribute('user').deptId == 1}">删除</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="emp : ${emps}">
+                                <th scope="row" th:text="${emp.id}">1</th>
+                                <th th:text="${emp.name}">2</th>
+                                <th th:text="${emp.account}">3</th>
+                                <th th:text="${emp.deptName}">4</th>
+                                <td><a th:href="@{/toEdit/emp(id=${emp.id})}">edit</a></td>
+                                <td th:if="${#session.getAttribute('user').deptId == 1}"><a th:href="@{/delete/emp(id=${emp.id})}">delete</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <a type="button" th:href="@{/toAdd/emp}" class="btn btn_5 btn-lg btn-success warning_1">添加员工</a>
+            </div>
+        </div>
+    </div>
+    <div class="dev-page"></div>
+</div>
+<div th:include="common/onload_js.html::onloadJS"></div>
+</body>
+</html>

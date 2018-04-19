@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/common_head.html::commonHeader">
+    <title>修改就诊记录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body class="cbp-spmenu-push">
+<div class="main-content">
+    <div th:include="common/side_bar.html::sideBar"></div>
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="grids">
+                <div class="progressbar-heading grids-heading">
+                    <h2>修改就诊记录</h2>
+                </div>
+                <div class="panel panel-widget forms-panel">
+                    <div class="forms">
+                        <div class="form-three widget-shadow">
+                            <form class="valida form-horizontal" method="post" th:action="@{/edit/visit}" th:object="${visit}">
+                                <input type="hidden" name="id" th:value="*{id}">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="name">用户姓名</label>
+                                    <div class="col-sm-4">
+                                        <input readonly th:value="*{userName}" type="text" name="name" id="name" required="true" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="phone">用户手机号</label>
+                                    <div class="col-sm-4">
+                                        <input readonly th:value="*{phone}" type="text" name="phone" id="phone" required="true" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" >
+                                    <label class="col-sm-2 control-label" for="doctor" >就诊医生</label>
+                                    <div class="col-sm-4">
+                                        <input readonly type="text" th:value="*{doctorName}" name="doctor" id="doctor" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" >
+                                    <label class="col-sm-2 control-label" for="time" >就诊时间</label>
+                                    <div class="col-sm-4">
+                                        <input readonly type="text" th:value="*{time}" name="time" id="time" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" >
+                                    <label class="col-sm-2 control-label" for="description" >病情介绍</label>
+                                    <div class="col-sm-4">
+                                        <textarea th:text="*{description}" name="description" id="description" class="form-control" style="height: 100px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group" >
+                                    <label class="col-sm-2 control-label" for="suggestion" >医生建议</label>
+                                    <div class="col-sm-4">
+                                        <textarea th:text="*{suggestion}" name="suggestion" id="suggestion" class="form-control" style="height: 100px"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group" >
+                                    <label class="col-sm-2 control-label" for="fee" >价格</label>
+                                    <div class="col-sm-4">
+                                        <input th:value="*{fee}" type="number" name="fee" id="fee" required="true" class="form-control"/>
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <p>
+                                <div class="col-sm-offset-2">
+                                    <span style="font-size: 12px;color: red" th:text="${message}"></span>
+                                    <input type="submit" name="sub-1" value="提交" class="btn btn-primary"/>
+                                    <input type="reset" name="res-1" id="res-1" value="重置" class="btn btn-danger"/>
+                                </div>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <a type="button" th:href="@{/list/visit}" class="btn btn_5 btn-lg btn-success warning_1">返回</a>
+            </div>
+        </div>
+    </div>
+    <div class="dev-page"></div>
+</div>
+<div th:include="common/onload_js.html::onloadJS"></div>
+</body>
+</html>

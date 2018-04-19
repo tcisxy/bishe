@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/common_head.html::commonHeader">
+<title>Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head> 
+<body class="login-bg">
+		<div class="login-body">
+			<div class="login-heading">
+				<h1>Login</h1>
+			</div>
+			<div class="login-info">
+				<form th:action="@{/toLogin}" th:method="post" th:object="${employee}">
+					<span style="font-size: 12px;color: red" th:text="${message}"></span>
+					<input id="account" type="text" class="user" name="account" placeholder="Account" required="true">
+					<input id="password" type="password" name="password" class="lock" placeholder="Password" required="true">
+					<div class="forgot-top-grids">
+						<div class="forgot-grid">
+							<ul>
+								<li>
+									<input type="checkbox" id="brand1" value="">
+									<label for="brand1"><span></span>Remember me</label>
+								</li>
+							</ul>
+						</div>
+						<div class="forgot">
+							<a href="#">Forgot password?</a>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+					<input type="submit" name="Sign In" value="Login">
+					<div class="signup-text">
+						<!--<a th:href="@{/signup}">Don't have an account? Create one now</a>-->
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="copyright login-copyright">
+		</div>
+</body>
+</html>
