@@ -1,0 +1,30 @@
+package com.example.demo.repository;
+
+import com.example.demo.entity.Consume;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+public interface ConsumeRepository extends JpaRepository<Consume,Long> {
+    Consume findById(long id);
+
+    List<Consume> findByUserId(long userId);
+
+    @Query("update Consume set status = ?2 where id = ?1")
+    @Modifying
+    @Transactional
+    void editConsumeById(Long id, Integer status);
+
+    @Query("select sum(money) from Consume where userId = ?1")
+    Long sumMoneyByUserId(long id);
+
+    @Query("select c from Consume c where c.time between ?1 and ?2")
+    List<Consume> findByStartTimeAndEndTime(Timestamp startTime, Timestamp endTime);
+
+    @Query("select c from Consume c where c.userId = ?3 and c.time between ?1 and ?2")
+    List<Consume> findByStartTimeAndEndTimeAndUserId(Timestamp startTime, Timestamp endTime, long userId);
+}
