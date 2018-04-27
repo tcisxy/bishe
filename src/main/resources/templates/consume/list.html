@@ -3,38 +3,43 @@
 <head th:include="common/common_head.html::commonHeader">
     <title>消费记录</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body class="cbp-spmenu-push">
 <div class="main-content">
     <div th:include="common/side_bar.html::sideBar"></div>
     <div id="page-wrapper">
         <div class="main-page">
-            <div>
-                <ol class="breadcrumb">
-                    <li><a th:href="@{/list/recharge}">充值记录</a></li>
-                    <li class="active">消费记录</li>
-                </ol>
-            </div>
             <div class="grids">
                 <div class="progressbar-heading grids-heading">
                     <h2>消费记录</h2>
                 </div>
                 <div class="panel panel-widget">
-                    <div class="search-box"  style="margin-left: 0;margin-bottom: 10px;width:100%">
-                        <form class="input" th:action="@{/query/consume}" th:method="post" th:object="${consume}">
-                            <input class="sb-search-input form-control" placeholder="手机号" id="phone"
-                                   name="phone" style="margin-right: 10px;width:200px;float: left"/>
-                            <div class="input-group date form_date col-md-3" data-link-field="dtp_input1" style="float: left">
-                                <input class="form-control" id="startTime" name="startTime" size="16" type="text" placeholder="开始时间" readonly>
+                    <div class="search-box" style="margin-left: 0;margin-bottom: 10px;width:100%">
+                        <form class="input" th:action="@{/query/consume}" th:method="post" th:object="${queryParam}">
+                            <input th:value="${phone}" class="sb-search-input form-control" placeholder="手机号" id="phone"
+                                   name="phone" style="margin-right: 10px;width:200px;margin-bottom: 10px"/>
+                            <div class="input-group date form_date col-md-3" data-link-field="dtp_input1"
+                                 style="float: left">
+                                <input class="form-control" id="startTime" name="startTime" size="16" type="text"
+                                       placeholder="开始时间" readonly>
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
                             </div>
-                            <div class="input-group date form_date1 col-md-3" data-link-field="dtp_input1" style="float: left">
-                                <input class="form-control" id="endTime" name="endTime" size="16" type="text" placeholder="结束时间" readonly>
+                            <div class="input-group date form_date1 col-md-3" data-link-field="dtp_input1"
+                                 style="float: left;margin-right: 10px">
+                                <input class="form-control" id="endTime" name="endTime" size="16" type="text"
+                                       placeholder="结束时间" readonly>
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
                             </div>
-                            <button type="submit" class="btn btn-primary" style="margin-left:20px;padding: 0.5em 1em;">查询</button>
-                            <a th:href="@{/list/recharge}" class="btn btn-info" style="padding: 0.5em 1em;">重置</a>
+                            <a onclick="threeDay()" class="btn btn-warning" style="padding: 0.5em 1em;">三天</a>
+                            <a onclick="oneWeek()" class="btn btn-warning" style="padding: 0.5em 1em;">一周</a>
+                            <a onclick="oneMonth()" class="btn btn-warning" style="padding: 0.5em 1em;">一月</a>
+
+                            <button type="submit" class="btn btn-primary" style="margin-left:20px;padding: 0.5em 1em;">
+                                查询
+                            </button>
+                            <a th:href="@{/list/consume}" class="btn btn-info" style="padding: 0.5em 1em;">重置</a>
+
                             <script>
                                 Date.prototype.Format = function (fmt) {
                                     var o = {
@@ -55,7 +60,7 @@
                                 $('.form_date').datetimepicker({
                                     format: 'yyyy-mm-dd hh:ii:ss',
                                     weekStart: 0,
-                                    todayBtn:  1,
+                                    todayBtn: 1,
                                     autoclose: 1,
                                     todayHighlight: 1,
                                     forceParse: 0,
@@ -64,14 +69,26 @@
                                 $('.form_date1').datetimepicker({
                                     format: 'yyyy-mm-dd hh:mm:ss',
                                     weekStart: 0,
-                                    todayBtn:  1,
+                                    todayBtn: 1,
                                     autoclose: 1,
                                     todayHighlight: 1,
                                     forceParse: 0,
                                     showMeridian: 1,
                                 });
-                                $('#startTime').val((new Date()).Format("yyyy-MM-dd hh:mm:ss"));
-                                $('#endTime').val((new Date()).Format("yyyy-MM-dd hh:mm:ss"));
+                                $('#startTime').val((new Date(new Date(new Date().toLocaleDateString()).getTime())).Format("yyyy-MM-dd hh:mm:ss"));
+                                $('#endTime').val((new Date(new Date(new Date().toLocaleDateString()).getTime() + 24 * 60 * 60 * 1000 - 1)).Format("yyyy-MM-dd hh:mm:ss"));
+
+                                function threeDay() {
+                                    $('#startTime').val((new Date(new Date(new Date().toLocaleDateString()).getTime() - 24 * 60 * 60 * 1000 * 2)).Format("yyyy-MM-dd hh:mm:ss"));
+                                }
+
+                                function oneWeek() {
+                                    $('#startTime').val((new Date(new Date(new Date().toLocaleDateString()).getTime() - 24 * 60 * 60 * 1000 * 6)).Format("yyyy-MM-dd hh:mm:ss"));
+                                }
+
+                                function oneMonth() {
+                                    $('#startTime').val((new Date(new Date(new Date().toLocaleDateString()).getTime() - 24 * 60 * 60 * 1000 * 30)).Format("yyyy-MM-dd hh:mm:ss"));
+                                }
                             </script>
                         </form>
                     </div>
@@ -100,7 +117,8 @@
                                 <td th:text="${consume.payName}">6</td>
                                 <!--<td th:text="${consume.consumeStatus}">6</td>-->
                                 <td><a th:href="@{/toEdit/consume(id=${consume.id})}">edit</a></td>
-                                <td th:if="${#session.getAttribute('user').deptId == 1}"><a th:href="@{/delete/consume(id=${consume.id})}">delete</a></td>
+                                <td th:if="${#session.getAttribute('user').deptId == 1}"><a
+                                        th:href="@{/delete/consume(id=${consume.id})}">delete</a></td>
                             </tr>
                             </tbody>
                         </table>
