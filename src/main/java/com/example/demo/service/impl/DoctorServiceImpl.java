@@ -65,4 +65,9 @@ public class DoctorServiceImpl implements DoctorService {
             doctorRepository.save(doctor);
         }
     }
+
+    @Override
+    public long count() {
+        return doctorRepository.count();
+    }
 }
