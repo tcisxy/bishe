@@ -1,11 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.User;
-import com.example.demo.service.ConsumeService;
-import com.example.demo.service.RechargeService;
+import com.example.demo.param.QueryParam;
 import com.example.demo.service.UserService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -50,13 +47,14 @@ public class UserController {
     }
 
     @RequestMapping("/query/user")
-    public ModelAndView queryUser(User user, ModelAndView modelAndView) {
+    public ModelAndView queryUser(QueryParam queryParam, ModelAndView modelAndView) {
         List<User> list = new ArrayList<>();
-        User _user = userService.getUserByPhone(user.getPhone());
+        User _user = userService.getUserByPhone(queryParam.getPhone());
         if(_user != null) {
             list.add(_user);
         }
         modelAndView.addObject("users",list);
+        modelAndView.addObject("phone",queryParam.getPhone());
         modelAndView.setViewName("user/list.html");
         return modelAndView;
     }
