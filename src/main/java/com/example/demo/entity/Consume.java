@@ -28,10 +28,6 @@ public class Consume implements Serializable {
     @Transient
     private String phone;
     @Transient
-    private Timestamp startTime;
-    @Transient
-    private Timestamp endTime;
-    @Transient
     private String payName;
 
     public long getId() {
@@ -96,22 +92,6 @@ public class Consume implements Serializable {
 
     public void setConsumeStatus(Integer consumeStatus) {
         this.consumeStatus = consumeStatus;
-    }
-
-    public Timestamp getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Timestamp startTime) {
-        this.startTime = startTime;
-    }
-
-    public Timestamp getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Timestamp endTime) {
-        this.endTime = endTime;
     }
 
     public String getPayName() {
