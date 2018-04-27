@@ -22,12 +22,12 @@ public class User implements Serializable{
     private Integer age;
     @Column(name = "vip_level")
     private Integer vipLevel;
-    @Column(name = "total_recharge")
-    private Long totalRecharge;
+//    @Column(name = "total_recharge")
+//    private Long totalRecharge;
     @Column(name = "total_consume")
     private Long totalConsume;
-    @Column(name = "cur_money")
-    private Long curMoney;
+//    @Column(name = "cur_money")
+//    private Long curMoney;
     @Column(name = "visit_num")
     private Integer visitNum;
 
@@ -79,13 +79,13 @@ public class User implements Serializable{
         this.vipLevel = vipLevel;
     }
 
-    public Long getTotalRecharge() {
-        return totalRecharge;
-    }
-
-    public void setTotalRecharge(Long totalRecharge) {
-        this.totalRecharge = totalRecharge;
-    }
+//    public Long getTotalRecharge() {
+//        return totalRecharge;
+//    }
+//
+//    public void setTotalRecharge(Long totalRecharge) {
+//        this.totalRecharge = totalRecharge;
+//    }
 
     public Long getTotalConsume() {
         return totalConsume;
@@ -95,13 +95,13 @@ public class User implements Serializable{
         this.totalConsume = totalConsume;
     }
 
-    public Long getCurMoney() {
-        return curMoney;
-    }
-
-    public void setCurMoney(Long curMoney) {
-        this.curMoney = curMoney;
-    }
+//    public Long getCurMoney() {
+//        return curMoney;
+//    }
+//
+//    public void setCurMoney(Long curMoney) {
+//        this.curMoney = curMoney;
+//    }
 
     public Integer getVisitNum() {
         return visitNum;
