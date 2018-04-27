@@ -20,4 +20,6 @@ public interface UserService {
 
     @Transactional
     void checkUserMoney();
+
+    long count();
 }
