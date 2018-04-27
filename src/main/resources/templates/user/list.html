@@ -16,8 +16,8 @@
                 </div>
                 <div class="panel panel-widget">
                     <div class="search-box"  style="margin-left: 0;margin-bottom: 10px;width:100%">
-                        <form class="input" th:action="@{/query/user}" th:method="post" th:object="${user}">
-                            <input class="sb-search-input form-control" required="true" placeholder="手机号" id="phone" name="phone" style="margin-right: 10px;width:200px;float: left"/>
+                        <form class="input" th:action="@{/query/user}" th:method="post" th:object="${queryParam}">
+                            <input th:value="${phone}" class="sb-search-input form-control" required="true" placeholder="手机号" id="phone" name="phone" style="margin-right: 10px;width:200px;float: left"/>
                             <button type="submit" class="btn btn-primary" style="padding: 0.5em 1em;">查询</button>
                             <a th:href="@{/list/user}" class="btn btn-info" style="padding: 0.5em 1em;">重置</a>
                         </form>
@@ -32,9 +32,7 @@
                                 <th>年龄</th>
                                 <th>性别</th>
                                 <th>会员等级</th>
-                                <th>总充值金额</th>
                                 <th>总消费金额</th>
-                                <th>当前余额</th>
                                 <th>就诊次数</th>
                                 <th>编辑</th>
                                 <th th:if="${#session.getAttribute('user').deptId == 1}">删除</th>
@@ -49,9 +47,7 @@
                                 <td th:text="男" th:if="${user.sex == 1}">1</td>
                                 <td th:text="女" th:if="${user.sex == 2}">1</td>
                                 <td th:text="${user.vipLevel}">6</td>
-                                <td th:text="${user.totalRecharge}">6</td>
                                 <td th:text="${user.totalConsume}">6</td>
-                                <td th:text="${user.curMoney}">6</td>
                                 <td th:text="${user.visitNum}">6</td>
                                 <td><a th:href="@{/toEdit/user(id=${user.id})}">edit</a></td>
                                 <td th:if="${#session.getAttribute('user').deptId == 1}"><a th:href="@{/delete/user(id=${user.id})}">delete</a></td>
