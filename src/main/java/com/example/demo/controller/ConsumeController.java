@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.component.PayComponent;
 import com.example.demo.entity.Consume;
 import com.example.demo.entity.User;
+import com.example.demo.param.QueryParam;
 import com.example.demo.service.ConsumeService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +48,6 @@ public class ConsumeController {
             modelAndView.addObject("message",message);
             return toAdd(modelAndView);
         }
-        if(_user.getCurMoney() < consume.getMoney()) {
-            String message = "用户余额不足！";
-            modelAndView.addObject("message",message);
-            return toAdd(modelAndView);
-        }
         consumeService.save(consume);
         modelAndView.setViewName("redirect:/list/consume");
         return modelAndView;
@@ -74,8 +70,9 @@ public class ConsumeController {
     }
 
     @RequestMapping("/query/consume")
-    public ModelAndView query(ModelAndView modelAndView, Consume consume) {
-        List<Consume> consumes = consumeService.getConsumeListByParam(consume);
+    public ModelAndView query(ModelAndView modelAndView, QueryParam queryParam) {
+        List<Consume> consumes = consumeService.getConsumeListByParam(queryParam);
+        modelAndView.addObject("phone", queryParam.getPhone());
         modelAndView.addObject("consumes",consumes);
         modelAndView.setViewName("consume/list.html");
         return modelAndView;
