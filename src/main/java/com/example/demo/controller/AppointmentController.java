@@ -4,6 +4,7 @@ import com.example.demo.entity.Appointment;
 import com.example.demo.entity.Doctor;
 import com.example.demo.entity.User;
 import com.example.demo.entity.Visit;
+import com.example.demo.param.QueryParam;
 import com.example.demo.service.AppointmentService;
 import com.example.demo.service.DoctorService;
 import com.example.demo.service.UserService;
@@ -26,8 +27,6 @@ public class AppointmentController {
     AppointmentService appointmentService;
     @Resource
     UserService userService;
-    @Resource
-    VisitService visitService;
 
     @RequestMapping("/list/appoint")
     public ModelAndView list(ModelAndView modelAndView) {
@@ -74,9 +73,10 @@ public class AppointmentController {
     }
 
     @RequestMapping("/query/appoint")
-    public ModelAndView query(Appointment appointment,ModelAndView modelAndView) {
-        List<Appointment> appointments = appointmentService.getAppointmentByPhone(appointment.getPhone());
+    public ModelAndView query(QueryParam queryParam, ModelAndView modelAndView) {
+        List<Appointment> appointments = appointmentService.getAppointmentByParam(queryParam);
         modelAndView.addObject("appointments",appointments);
+        modelAndView.addObject("phone",queryParam.getPhone());
         modelAndView.setViewName("appoint/list.html");
         return modelAndView;
     }
@@ -84,18 +84,11 @@ public class AppointmentController {
     @RequestMapping("/toQueue/appoint")
     @Transactional
     public ModelAndView queue(ModelAndView modelAndView, long id) {
-        Appointment appointment = appointmentService.getAppointmentById(id);
         modelAndView.setViewName("redirect:/list/appoint");
-        if(appointment.getTime().after(new Timestamp(System.currentTimeMillis()))) {
-            return modelAndView;
+        if(!appointmentService.queue(id)) {
+            String message = "预约时间未到";
+            modelAndView.addObject("message",message);
         }
-        appointment.setAppointStatus(1);
-        appointmentService.save(appointment);
-        Visit visit = new Visit();
-        visit.setDoctorId(appointment.getDoctorId());
-        visit.setPhone(appointment.getPhone());
-        visitService.save(visit);
-
         return modelAndView;
     }
 }
