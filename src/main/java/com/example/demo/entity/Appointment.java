@@ -21,6 +21,8 @@ public class Appointment implements Serializable{
     private Timestamp time;
     @Column(name = "status")
     private Integer appointStatus;
+    @Column(name = "visit_id")
+    private Long visitId;
     @Transient
     private String doctorName;
     @Transient
@@ -91,5 +93,13 @@ public class Appointment implements Serializable{
 
     public void setAppointStatus(Integer appointStatus) {
         this.appointStatus = appointStatus;
+    }
+
+    public Long getVisitId() {
+        return visitId;
+    }
+
+    public void setVisitId(Long visitId) {
+        this.visitId = visitId;
     }
 }
