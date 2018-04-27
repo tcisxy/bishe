@@ -18,4 +18,6 @@ public interface DoctorService {
 
     @Transactional
     void checkDoctorInfo();
+
+    long count();
 }
