@@ -27,6 +27,8 @@ public class Visit implements Serializable {
     private String suggestion;
     @Column(name = "fee")
     private Long fee;
+    @Column(name = "consume_id")
+    private Long consumeId;
     @Transient
     private String phone;
     @Transient
@@ -120,5 +122,13 @@ public class Visit implements Serializable {
 
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
+    }
+
+    public Long getConsumeId() {
+        return consumeId;
+    }
+
+    public void setConsumeId(Long consumeId) {
+        this.consumeId = consumeId;
     }
 }
