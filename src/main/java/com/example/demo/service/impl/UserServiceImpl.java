@@ -4,6 +4,7 @@ import com.example.demo.entity.User;
 import com.example.demo.entity.VipLevel;
 import com.example.demo.repository.*;
 import com.example.demo.service.UserService;
+import com.example.demo.util.IndexUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private RechargeRepository rechargeRepository;
     @Autowired
     private ConsumeRepository consumeRepository;
     @Autowired
@@ -35,12 +34,6 @@ public class UserServiceImpl implements UserService {
         }
         if (user.getAge() == null) {
             user.setAge(0);
-        }
-        if(user.getCurMoney() == null) {
-            user.setCurMoney(0L);
-        }
-        if(user.getTotalRecharge() == null) {
-            user.setTotalRecharge(0L);
         }
         if(user.getTotalConsume() == null) {
             user.setTotalConsume(0L);
@@ -78,27 +71,16 @@ public class UserServiceImpl implements UserService {
     public void checkUserMoney() {
         List<User> users = userRepository.findAll();
         for (User user : users) {
-            Long recharge = rechargeRepository.sumMoneyByUserId(user.getId());
             Long consume = consumeRepository.sumMoneyByUserId(user.getId());
-            user.setTotalRecharge(recharge == null ? 0 : recharge);
             user.setTotalConsume(consume == null ? 0 : consume);
-            user.setCurMoney(user.getTotalRecharge() - user.getTotalConsume());
-            user.setVipLevel(getVipLevel(user.getTotalRecharge()));
+            user.setVipLevel(IndexUtil.getVipLevel(vipLevelRepository.findAll(),user.getTotalConsume()));
             user.setVisitNum(visitRepository.countByUserId(user.getId()));
             userRepository.save(user);
         }
     }
 
-    private int getVipLevel(long rechargeMoney) {
-        long stand = 0;
-        long id = 0;
-        List<VipLevel> vipLevels = vipLevelRepository.findAll();
-        for (VipLevel vipLevel : vipLevels) {
-            if (vipLevel.getLevelStandard() <= rechargeMoney && vipLevel.getLevelStandard() >= stand) {
-                stand = vipLevel.getLevelStandard();
-                id = vipLevel.getId();
-            }
-        }
-        return (int) id;
+    @Override
+    public long count() {
+        return userRepository.count();
     }
 }
