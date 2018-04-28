@@ -29,6 +29,9 @@ public class Visit implements Serializable {
     private Long fee;
     @Column(name = "consume_id")
     private Long consumeId;
+    @Column(name = "is_first")
+    private Boolean isFirst;
+
     @Transient
     private String phone;
     @Transient
@@ -130,5 +133,13 @@ public class Visit implements Serializable {
 
     public void setConsumeId(Long consumeId) {
         this.consumeId = consumeId;
+    }
+
+    public Boolean getFirst() {
+        return isFirst;
+    }
+
+    public void setFirst(Boolean first) {
+        isFirst = first;
     }
 }
