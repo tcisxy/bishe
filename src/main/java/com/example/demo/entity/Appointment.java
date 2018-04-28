@@ -23,6 +23,9 @@ public class Appointment implements Serializable{
     private Integer appointStatus;
     @Column(name = "visit_id")
     private Long visitId;
+    @Column(name = "is_first")
+    private Boolean isFirst;
+
     @Transient
     private String doctorName;
     @Transient
@@ -101,5 +104,13 @@ public class Appointment implements Serializable{
 
     public void setVisitId(Long visitId) {
         this.visitId = visitId;
+    }
+
+    public Boolean getFirst() {
+        return isFirst;
+    }
+
+    public void setFirst(Boolean first) {
+        isFirst = first;
     }
 }
