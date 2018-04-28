@@ -13,7 +13,7 @@ public interface AppointmentService {
 
     Appointment getAppointmentById(long id);
 
-    void save(Appointment appointment);
+    boolean save(Appointment appointment);
 
     void edit(Appointment appointment);
 
