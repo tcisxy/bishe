@@ -6,6 +6,8 @@ public class QueryParam {
     private String phone;
     private Timestamp startTime;
     private Timestamp endTime;
+    private String name;
+    private Long doctorId;
 
     public String getPhone() {
         return phone;
@@ -29,5 +31,21 @@ public class QueryParam {
 
     public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(Long doctorId) {
+        this.doctorId = doctorId;
     }
 }
