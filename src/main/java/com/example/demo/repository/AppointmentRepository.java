@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -20,6 +21,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long>,J
     @Transactional
     void edit(Long id,Integer status);
 
-    @Query("select count(Appointment ) from Appointment where time between ?1 and ?2")
+    @Query("select count(id) from Appointment where time between ?1 and ?2")
     long countToday(Timestamp start, Timestamp end);
+
+    @Query("select distinct (a .doctorId) from Appointment as a where a.time between ?1 and ?2")
+    List<Long> findAppointedDoctor(Timestamp start, Timestamp end);
 }
