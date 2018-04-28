@@ -1,8 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Doctor;
+import com.example.demo.param.QueryParam;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.print.Doc;
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface DoctorService {
@@ -20,4 +23,8 @@ public interface DoctorService {
     void checkDoctorInfo();
 
     long count();
+
+    List<Doctor> getAvailableDoctorList(Timestamp startTime, Timestamp endTime);
+
+    List<Doctor> getDoctorListByParam(QueryParam queryParam);
 }
