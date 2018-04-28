@@ -39,7 +39,7 @@ public class VisitServiceImpl implements VisitService {
     @Autowired
     private DoctorRepository doctorRepository;
     @Autowired
-    private ConsumeRepository consumeRepository;
+    private UserServiceImpl userServiceImpl;
 
     @Override
     public List<Visit> getUserVisitList() {
@@ -105,7 +105,7 @@ public class VisitServiceImpl implements VisitService {
 
     @Override
     public List<Visit> queryByParam(QueryParam queryParam) {
-        List<Visit> visits = visitRepository.findAll(getWhereClause(queryParam.getPhone(), queryParam.getStartTime(), queryParam.getEndTime()), new Sort(Sort.Direction.DESC, "time"));
+        List<Visit> visits = visitRepository.findAll(getWhereClause(queryParam.getName().trim(),queryParam.getPhone().trim(),queryParam.getDoctorId(), queryParam.getStartTime(), queryParam.getEndTime()), new Sort(Sort.Direction.DESC, "time"));
         for (Visit _visit : visits) {
             _visit.setUserName(userRepository.findById(_visit.getUserId()).get().getName());
             _visit.setDoctorName(doctorRepository.findById(_visit.getDoctorId()).get().getName());
@@ -114,17 +114,26 @@ public class VisitServiceImpl implements VisitService {
         return visits;
     }
 
-    private Specification<Visit> getWhereClause(final String phone, final Timestamp startTime, final Timestamp endTime) {
+    private Specification<Visit> getWhereClause(final String name, final String phone,final Long doctorId, final Timestamp startTime, final Timestamp endTime) {
         return new Specification<Visit>() {
             @Nullable
             @Override
             public Predicate toPredicate(Root<Visit> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 Predicate predicate = criteriaBuilder.conjunction();
-                if (phone != null) {
-                    User user = userRepository.findByPhone(phone);
-                    if (user != null)
-                        predicate.getExpressions().add(criteriaBuilder.equal(root.<Long>get("userId"), user.getId()));
+                if(!StringUtils.isEmpty(name) || !StringUtils.isEmpty(phone)) {
+                    List<User> users = userRepository.findAll(userServiceImpl.getWhereClause(name,phone));
+                    if(users.size() == 0) {
+                        predicate.getExpressions().add(criteriaBuilder.equal(root.<Long>get("userId"),-1));
+                    }else {
+                        List<Long> userIds = new ArrayList<>();
+                        for(User user : users) {
+                            userIds.add(user.getId());
+                        }
+                        predicate.getExpressions().add(criteriaBuilder.and(root.<Long>get("userId").in(userIds)));
+                    }
                 }
+                if(doctorId != null)
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.<Long>get("doctorId"),doctorId));
                 if (startTime != null && endTime != null)
                     predicate.getExpressions().add(criteriaBuilder.between(root.<Timestamp>get("time"), startTime, endTime));
                 else if (startTime != null && endTime == null)
