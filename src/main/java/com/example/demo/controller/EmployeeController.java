@@ -80,4 +80,11 @@ public class EmployeeController {
         return modelAndView;
     }
 
+    @RequestMapping("/query/emp")
+    public ModelAndView query(ModelAndView modelAndView, Employee employee) {
+        modelAndView.addObject("emps",employeeService.getEmpListByName(employee.getName()));
+        modelAndView.addObject("name",employee.getName());
+        modelAndView.setViewName("employee/list.html");
+        return modelAndView;
+    }
 }
