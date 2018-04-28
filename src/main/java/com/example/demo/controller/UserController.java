@@ -26,12 +26,16 @@ public class UserController {
 
     @RequestMapping("/toAdd/user")
     public ModelAndView toAdd(ModelAndView modelAndView) {
+        User user = new User();
+        user.setSex(1);
+        modelAndView.addObject("old",user);
         modelAndView.setViewName("user/addUser.html");
         return modelAndView;
     }
 
     @RequestMapping("/add/user")
     public ModelAndView addUser(ModelAndView modelAndView, User user) {
+        modelAndView.addObject("old",user);
         if(!user.getPhone().matches("^1[3|4|5|7|8][0-9]\\d{8}$")) {
             String message = "手机号不合法！";
             return throwError(modelAndView,message,"user/addUser.html");
@@ -48,13 +52,10 @@ public class UserController {
 
     @RequestMapping("/query/user")
     public ModelAndView queryUser(QueryParam queryParam, ModelAndView modelAndView) {
-        List<User> list = new ArrayList<>();
-        User _user = userService.getUserByPhone(queryParam.getPhone());
-        if(_user != null) {
-            list.add(_user);
-        }
+        List<User> list = userService.getUserByParam(queryParam);
         modelAndView.addObject("users",list);
         modelAndView.addObject("phone",queryParam.getPhone());
+        modelAndView.addObject("name", queryParam.getName());
         modelAndView.setViewName("user/list.html");
         return modelAndView;
     }
