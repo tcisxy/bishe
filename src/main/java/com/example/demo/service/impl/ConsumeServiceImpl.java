@@ -36,6 +36,8 @@ public class ConsumeServiceImpl implements ConsumeService {
     private PayComponent payComponent;
     @Autowired
     private VipLevelRepository vipLevelRepository;
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
     @Override
     public List<Consume> getConsumeList() {
@@ -58,7 +60,7 @@ public class ConsumeServiceImpl implements ConsumeService {
 
     @Override
     public List<Consume> getConsumeListByParam(QueryParam queryParam) {
-        List<Consume> consumes = consumeRepository.findAll(getWhereClause(queryParam.getPhone(),queryParam.getStartTime(),queryParam.getEndTime()),new Sort(Sort.Direction.DESC,"time"));
+        List<Consume> consumes = consumeRepository.findAll(getWhereClause(queryParam.getName(),queryParam.getPhone(),queryParam.getStartTime(),queryParam.getEndTime()),new Sort(Sort.Direction.DESC,"time"));
         for(Consume _consume : consumes) {
             User user = userRepository.findById(_consume.getUserId());
             _consume.setPhone(user.getPhone());
@@ -66,6 +68,15 @@ public class ConsumeServiceImpl implements ConsumeService {
             _consume.setPayName(payComponent.getType().get(_consume.getType()));
         }
         return consumes;
+    }
+
+    @Override
+    public Long sumMoneyByParam(QueryParam queryParam) {
+        long sum = 0;
+        for(Consume consume : getConsumeListByParam(queryParam)) {
+            sum += consume.getMoney();
+        }
+        return sum;
     }
 
     @Override
@@ -106,16 +117,23 @@ public class ConsumeServiceImpl implements ConsumeService {
         return consumeRepository.findAllByOrderByTime();
     }
 
-    private Specification<Consume> getWhereClause(final String phone,final Timestamp startTime,final Timestamp endTime) {
+    private Specification<Consume> getWhereClause(final String name, final String phone,final Timestamp startTime,final Timestamp endTime) {
         return new Specification<Consume>() {
             @Nullable
             @Override
             public Predicate toPredicate(Root<Consume> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 Predicate predicate = criteriaBuilder.conjunction();
-                if(phone != null){
-                    User user = userRepository.findByPhone(phone);
-                    if(user != null)
-                        predicate.getExpressions().add(criteriaBuilder.equal(root.<Long>get("userId"),user.getId()));
+                if(!StringUtils.isEmpty(name) || !StringUtils.isEmpty(phone)) {
+                    List<User> users = userRepository.findAll(userServiceImpl.getWhereClause(name,phone));
+                    if(users.size() == 0) {
+                        predicate.getExpressions().add(criteriaBuilder.equal(root.<Long>get("userId"),-1));
+                    }else {
+                        List<Long> userIds = new ArrayList<>();
+                        for(User user : users) {
+                            userIds.add(user.getId());
+                        }
+                        predicate.getExpressions().add(criteriaBuilder.and(root.<Long>get("userId").in(userIds)));
+                    }
                 }
 
                 if(startTime != null && endTime != null)
