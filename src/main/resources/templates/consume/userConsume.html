@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/common_head.html::commonHeader">
+    <title>会员消费详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body class="cbp-spmenu-push">
+<div class="main-content">
+    <div th:include="common/side_bar.html::sideBar"></div>
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="grids">
+                <div class="progressbar-heading grids-heading">
+                    <h2>会员消费详情</h2>
+                </div>
+                <div class="panel panel-widget">
+                    <div class="panel-body">
+                        <div class="lines-points">
+                            <div id="example-4" style="height:400px;"></div>
+                            <script type="text/javascript">
+                                var coChart = echarts.init(document.getElementById('example-4'));
+                                var option = {
+                                    title : {
+                                        text : '消费-时间折线图',
+                                        subtext : ''
+                                    },
+                                    tooltip : {
+                                        trigger: 'item',
+                                        formatter : function (params) {
+                                            var date = new Date(params.value[0]);
+                                            data = date.getFullYear() + '-'
+                                                + (date.getMonth() + 1) + '-'
+                                                + date.getDate() + ' '
+                                                + date.getHours() + ':'
+                                                + date.getMinutes();
+                                            return data + '<br/>'
+                                                + params.value[1];
+                                        }
+                                    },
+                                    legend : {
+                                        data : ['series1']
+                                    },
+                                    grid: {
+                                        y2: 80
+                                    },
+                                    xAxis : [
+                                        {
+                                            type : 'time'
+                                        }
+                                    ],
+                                    yAxis : [
+                                        {
+                                            type : 'value'
+                                        }
+                                    ],
+                                    series : [
+                                        {
+                                            name: 'series1',
+                                            type: 'line',
+                                            showAllSymbol: true,
+                                            symbol: 'circle',
+                                            symbolSize: 20,
+                                            data:[]
+                                        }
+                                    ]
+                                }
+                                coChart.showLoading();
+                                coChart.setOption(option);
+                                $.ajax({
+                                    url:"/data/user/consume?id="+[[${id}]],
+                                    success:function(res) {
+                                        coChart.hideLoading();
+                                        coChart.setOption({
+                                            series: [{
+                                                name: 'series1',
+                                                data: (function () {
+                                                    var d = [];
+                                                    for(i = 0;i < res.length;i++) {
+                                                        d.push([new Date(res[i].time),res[i].money]);
+                                                    }
+                                                    return d;
+                                                })()
+                                            }]
+                                        });
+                                    }
+                                })
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dev-page"></div>
+</div>
+<div th:include="common/onload_js.html::onloadJS"></div>
+</body>
+</html>
