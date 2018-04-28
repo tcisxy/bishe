@@ -21,4 +21,25 @@ public class TimeUtil {
         calendar.set(Calendar.MILLISECOND,999);
         return new Timestamp(calendar.getTimeInMillis());
     }
+
+    public static Timestamp getHourStartTime() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
+        return new Timestamp(calendar.getTimeInMillis());
+    }
+
+    public static Timestamp getHourEndTime() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MINUTE,59);
+        calendar.set(Calendar.SECOND,59);
+        calendar.set(Calendar.MILLISECOND,999);
+        return new Timestamp(calendar.getTimeInMillis());
+    }
+
+    public static void main(String[] args) {
+        System.err.println(getHourStartTime());
+        System.err.println(getHourEndTime());
+    }
 }
