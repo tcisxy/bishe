@@ -22,7 +22,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label" for="phone">用户手机号</label>
                                     <div class="col-sm-4">
-                                        <input type="text" name="phone" id="phone" required="true"
+                                        <input th:value="${phone}" type="text" name="phone" id="phone" required="true"
                                                class="form-control"/>
                                     </div>
                                 </div>
@@ -31,9 +31,7 @@
                                     <div class="col-sm-4">
                                         <select name="doctorId" id="doctorId" required="true" class="form-control">
                                             <option value="" selected="true">--请选择--</option>
-                                            <option th:each="doctor : ${doctors}" th:value="${doctor.id}"
-                                                    th:text="${doctor.name}">Doctor Name
-                                            </option>
+                                            <option th:each="doctor : ${doctors}" th:value="${doctor.id}" th:text="${doctor.name}" th:selected="${doctor.id == doctorId}">Doctor Name</option>
                                         </select>
                                     </div>
                                 </div>
@@ -41,7 +39,7 @@
                                     <label class="col-sm-2 control-label" for="time">预约时间</label>
                                     <div class="col-sm-4">
                                         <div class="input-group date form_date" data-link-field="dtp_input1" style="float: left">
-                                            <input required="true" class="form-control" id="time" name="time" size="16" type="text" placeholder="预约时间" readonly>
+                                            <input required="true" th:value="${time}" class="form-control" id="time" name="time" size="16" type="text" placeholder="预约时间" readonly>
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
                                         </div>
                                     </div>
@@ -68,9 +66,28 @@
                                             todayBtn:  1,
                                             autoclose: 1,
                                             todayHighlight: 1,
-                                            forceParse: 0
+                                            forceParse: 0,
+                                            minView:1
                                         });
-                                        $('#time').val((new Date()).Format("yyyy-MM-dd hh:mm:ss"));
+                                        console.log($('#time').val());
+                                        if(!$('#time').val()) {
+                                            var date = new Date();
+                                            date.setSeconds(0);
+                                            date.setMinutes(0);
+                                            $('#time').val(date.Format("yyyy-MM-dd hh:mm:ss"));
+                                        }else {
+                                            $('#time').val(new Date($('#time').val()).Format("yyyy-MM-dd hh:mm:ss"));
+                                            $('.form_date').datetimepicker('setStartDate', null);
+                                        }
+
+
+                                        $("#time").change(function(){
+                                            var date = new Date($("#time").val());
+                                            date.setSeconds(0);
+                                            date.setMinutes(0);
+                                            $("#time").val(date.Format("yyyy-MM-dd hh:mm:ss"));
+                                            window.location.href="/changeTime/appoint?time="+$("#time").val()+"&phone="+$("#phone").val();
+                                        })
                                     </script>
                                 </div>
                                 <hr>
