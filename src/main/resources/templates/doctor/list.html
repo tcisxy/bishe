@@ -16,11 +16,12 @@
                 </div>
                 <div class="panel panel-widget">
                     <div class="search-box"  style="margin-left: 0;margin-bottom: 10px;width:100%">
-                        <!--<form class="input" th:action="@{/query/user}" th:method="post" th:object="${user}">-->
-                            <!--<input class="sb-search-input form-control" required="true" placeholder="手机号" id="phone" name="phone" style="margin-right: 10px;width:200px;float: left"/>-->
-                            <!--<button type="submit" class="btn btn-primary" style="padding: 0.5em 1em;">查询</button>-->
-                            <!--<a th:href="@{/list/user}" class="btn btn-info" style="padding: 0.5em 1em;">重置</a>-->
-                        <!--</form>-->
+                        <form class="input" th:action="@{/query/doctor}" th:method="post" th:object="${queryParam}">
+                            <input th:value="${name}" class="sb-search-input form-control" placeholder="姓名" id="name" name="name" style="margin-right: 10px;width:200px;float: left"/>
+                            <input th:value="${phone}" class="sb-search-input form-control" placeholder="手机号" id="phone" name="phone" style="margin-right: 10px;width:200px;float: left"/>
+                            <button type="submit" class="btn btn-primary" style="padding: 0.5em 1em;">查询</button>
+                            <a th:href="@{/list/doctor}" class="btn btn-info" style="padding: 0.5em 1em;">重置</a>
+                        </form>
                     </div>
                     <div class="tables">
                         <table class="table table-bordered text-nowrap" style="table-layout:fixed">
