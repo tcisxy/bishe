@@ -25,7 +25,7 @@ public interface VisitRepository extends JpaRepository<Visit,Long>,JpaSpecificat
     @Query
     int countByDoctorId(long doctorId);
 
-    @Query("select count(Visit) from Visit where time between ?1 and ?2")
+    @Query("select count(id) from Visit where time between ?1 and ?2")
     long countToday(Timestamp start, Timestamp end);
 
     List<Visit> findAllByOrderByTimeDesc();
