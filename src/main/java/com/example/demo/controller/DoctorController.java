@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Doctor;
+import com.example.demo.param.QueryParam;
 import com.example.demo.service.DoctorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,15 +28,21 @@ public class DoctorController {
 
     @RequestMapping("/toAdd/doctor")
     public ModelAndView toAdd(ModelAndView modelAndView) {
+        Doctor doctor = new Doctor();
+        doctor.setSex(1);
+        modelAndView.addObject("doctor", doctor);
         modelAndView.setViewName("doctor/addDoctor.html");
         return modelAndView;
     }
 
     @RequestMapping("/add/doctor")
     public ModelAndView add(ModelAndView modelAndView, Doctor doctor) {
+        modelAndView.addObject("doctor",doctor);
         if(!StringUtils.isEmpty(doctor.getPhone()) && !doctor.getPhone().matches("^1[3|4|5|7|8][0-9]\\d{8}$")) {
             String message = "手机号不合法！";
-            UserController.throwError(modelAndView,message,"doctor/addDoctor.html");
+            modelAndView.addObject("message",message);
+            modelAndView.setViewName("doctor/addDoctor.html");
+            return modelAndView;
         }
         doctorService.save(doctor);
         modelAndView.setViewName("redirect:/list/doctor");
@@ -76,5 +83,13 @@ public class DoctorController {
         return modelAndView;
     }
 
-
+    @RequestMapping("/query/doctor")
+    public ModelAndView query(ModelAndView modelAndView, QueryParam queryParam) {
+        List<Doctor> doctors = doctorService.getDoctorListByParam(queryParam);
+        modelAndView.addObject("doctors", doctors);
+        modelAndView.addObject("name", queryParam.getName());
+        modelAndView.addObject("phone", queryParam.getPhone());
+        modelAndView.setViewName("doctor/list.html");
+        return modelAndView;
+    }
 }
