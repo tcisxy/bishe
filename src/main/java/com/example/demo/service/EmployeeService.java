@@ -16,4 +16,6 @@ public interface EmployeeService {
     void delete(Long id);
 
     Employee getEmpById(Long id);
+
+    List<Employee> getEmpListByName(String name);
 }
