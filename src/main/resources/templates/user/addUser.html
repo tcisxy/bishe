@@ -17,35 +17,33 @@
                 <div class="panel panel-widget forms-panel">
                     <div class="forms">
                         <div class="form-three widget-shadow">
-                            <form class="valida form-horizontal" method="post" th:action="@{/add/user}"
-                                  th:object="${user}">
+                            <form class="valida form-horizontal" method="post" th:action="@{/add/user}" th:object="${user}">
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label" for="name">用户姓名</label>
                                     <div class="col-sm-4">
-                                        <input type="text" name="name" id="name" required="true" class="form-control"/>
+                                        <input th:value="${old.name}" type="text" name="name" id="name" required="true" class="form-control"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label" for="phone">用户手机号</label>
                                     <div class="col-sm-4">
-                                        <input type="text" name="phone" id="phone" required="true"
-                                               class="form-control col-sm-4"/>
+                                        <input th:value="${old.phone}" type="text" name="phone" id="phone" required="true" class="form-control col-sm-4"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label" for="age">年龄</label>
                                     <div class="col-sm-4">
-                                        <input type="number" name="age" id="age" class="form-control col-sm-4"/>
+                                        <input th:value="${old.age}" type="number" name="age" id="age" class="form-control col-sm-4"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">性别</label>
                                     <div class="col-sm-4">
                                         <div class="radio-inline">
-                                            <label><input type="radio" name="sex" value="1" checked="true">男</label>
+                                            <label><input type="radio" name="sex" value="1" checked="true" th:checked="${old.sex == 1}">男</label>
                                         </div>
                                         <div class="radio-inline">
-                                            <label><input type="radio" name="sex" value="2">女</label>
+                                            <label><input type="radio" name="sex" value="2" th:checked="${old.sex == 2}">女</label>
                                         </div>
                                     </div>
                                 </div>
