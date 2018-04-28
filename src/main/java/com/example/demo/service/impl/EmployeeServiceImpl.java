@@ -50,4 +50,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee getEmpById(Long id) {
         return employeeRepository.findById(id).get();
     }
+
+    @Override
+    public List<Employee> getEmpListByName(String name) {
+        List<Employee> employees = employeeRepository.findByName(name);
+        for(Employee employee : employees) {
+            employee.setDeptName(departmentRepository.findById(employee.getDeptId()).getName());
+        }
+        return employees;
+    }
 }
