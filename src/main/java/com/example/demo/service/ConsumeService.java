@@ -13,6 +13,8 @@ public interface ConsumeService {
 
     List<Consume> getConsumeListByParam(QueryParam queryParam);
 
+    Long sumMoneyByParam(QueryParam queryParam);
+
     @Transactional
     Consume save(Consume consume);
 
