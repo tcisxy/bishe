@@ -9,6 +9,7 @@ import com.example.demo.service.AppointmentService;
 import com.example.demo.service.DoctorService;
 import com.example.demo.service.UserService;
 import com.example.demo.service.VisitService;
+import com.example.demo.util.TimeUtil;
 import com.fasterxml.jackson.datatype.jsr310.ser.YearSerializer;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,8 @@ public class AppointmentController {
     @RequestMapping("/list/appoint")
     public ModelAndView list(ModelAndView modelAndView) {
         List<Appointment> appointments = appointmentService.getAppointList();
+        List<Doctor> doctors = doctorService.getDoctorList();
+        modelAndView.addObject("doctors",doctors);
         modelAndView.addObject("appointments", appointments);
         modelAndView.setViewName("appoint/list.html");
         return modelAndView;
@@ -38,7 +41,8 @@ public class AppointmentController {
 
     @RequestMapping("/toAdd/appoint")
     public ModelAndView toAdd(ModelAndView modelAndView) {
-        List<Doctor> doctors = doctorService.getDoctorList();
+        List<Doctor> doctors = doctorService.getAvailableDoctorList(TimeUtil.getHourStartTime(),TimeUtil.getHourEndTime());
+        modelAndView.addObject("time",TimeUtil.getHourStartTime());
         modelAndView.addObject("doctors",doctors);
         modelAndView.setViewName("appoint/addAppoint.html");
         return modelAndView;
@@ -47,12 +51,19 @@ public class AppointmentController {
     @RequestMapping("/add/appoint")
     public ModelAndView add(ModelAndView modelAndView, Appointment appointment) {
         User _user = userService.getUserByPhone(appointment.getPhone());
+        modelAndView.addObject("time",appointment.getTime());
+        modelAndView.addObject("phone",appointment.getPhone());
+        modelAndView.addObject("doctorId",appointment.getDoctorId());
         if(_user == null) {
             String message = "此用户不存在！";
             modelAndView.addObject("message",message);
             return toAdd(modelAndView);
         }
-        appointmentService.save(appointment);
+        if(!appointmentService.save(appointment)) {
+            String message = "此医生已有预约！";
+            modelAndView.addObject("message",message);
+            return toAdd(modelAndView);
+        }
         modelAndView.setViewName("redirect:/list/appoint");
         return modelAndView;
     }
@@ -74,21 +85,36 @@ public class AppointmentController {
 
     @RequestMapping("/query/appoint")
     public ModelAndView query(QueryParam queryParam, ModelAndView modelAndView) {
+        List<Doctor> doctors = doctorService.getDoctorList();
+        modelAndView.addObject("doctors",doctors);
         List<Appointment> appointments = appointmentService.getAppointmentByParam(queryParam);
         modelAndView.addObject("appointments",appointments);
+        modelAndView.addObject("name", queryParam.getName());
         modelAndView.addObject("phone",queryParam.getPhone());
+        modelAndView.addObject("startTime",queryParam.getStartTime());
+        modelAndView.addObject("endTime",queryParam.getEndTime());
+        modelAndView.addObject("doctorId", queryParam.getDoctorId());
         modelAndView.setViewName("appoint/list.html");
         return modelAndView;
     }
 
     @RequestMapping("/toQueue/appoint")
-    @Transactional
     public ModelAndView queue(ModelAndView modelAndView, long id) {
         modelAndView.setViewName("redirect:/list/appoint");
         if(!appointmentService.queue(id)) {
             String message = "预约时间未到";
             modelAndView.addObject("message",message);
         }
+        return modelAndView;
+    }
+
+    @RequestMapping("/changeTime/appoint")
+    public ModelAndView changeTime(ModelAndView modelAndView, Timestamp time, String phone) {
+        List<Doctor> doctors = doctorService.getAvailableDoctorList(time,new Timestamp(time.getTime() + 59 * 60 * 1000));
+        modelAndView.addObject("doctors",doctors);
+        modelAndView.addObject("time",time);
+        modelAndView.addObject("phone",phone);
+        modelAndView.setViewName("appoint/addAppoint.html");
         return modelAndView;
     }
 }
